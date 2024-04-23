@@ -130,6 +130,10 @@ dconf write /org/gnome/settings-daemon/plugins/power/power-button-action '"suspe
 dconf write /org/gnome/TextEditor/spellcheck false      # Check Spelling = False
 dconf write /org/gnome/TextEditor/restore-session false # Restore Session = False
 
+# Nautilus
+dconf write /org/gtk/gtk4/settings/file-chooser/show-hidden true        # Show Hidden Files = True
+dconf write /org/gnome/nautilus/icon-view/default-zoom-level '"medium"' # Icon Size = Medium
+
 # =====================================================================================================================
 #   Software
 # =====================================================================================================================
