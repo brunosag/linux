@@ -51,8 +51,10 @@ echo -e "[user]\n\temail = brunosag02@gmail.com\n\tname = brunosag" >~/.gitconfi
 # Install GNOME Extensions CLI
 sudo apt install pipx -y
 pipx install gnome-extensions-cli --system-site-packages
-echo 'export PATH="~/.local/bin:$PATH"' >>~/.bashrc
 export PATH="~/.local/bin:$PATH"
+if ! grep -qxF 'export PATH="~/.local/bin:$PATH"' ~/.bashrc; then
+    echo 'export PATH="~/.local/bin:$PATH"' >>~/.bashrc
+fi
 
 # Install extensions
 gnome-extensions-cli install user-theme@gnome-shell-extensions.gcampax.github.com
@@ -146,28 +148,28 @@ wget -qO- https://raw.githubusercontent.com/harry-cpp/code-nautilus/master/insta
 sudo snap install spotify
 
 # Install Extension Manager
-flatpak install flathub com.mattjakeman.ExtensionManager -y
+sudo flatpak install flathub com.mattjakeman.ExtensionManager -y
 
 # Install Dconf Editor
-flatpak install flathub ca.desrt.dconf-editor -y
+sudo flatpak install flathub ca.desrt.dconf-editor -y
 
 # Install WhatsApp
-flatpak install flathub io.github.mimbrero.WhatsAppDesktop -y
+sudo flatpak install flathub io.github.mimbrero.WhatsAppDesktop -y
 
 # Install Discord
-flatpak install flathub com.discordapp.Discord -y
+sudo flatpak install flathub com.discordapp.Discord -y
 
 # Install Stremio
-flatpak install flathub com.stremio.Stremio -y
+sudo flatpak install flathub com.stremio.Stremio -y
 
 # Install Inkscape
-flatpak install flathub org.inkscape.Inkscape -y
+sudo flatpak install flathub org.inkscape.Inkscape -y
 
 # Update Snap packages
 sudo snap refresh
 
 # Update Flatpak packages
-flatpak update -y
+sudo flatpak update -y
 
 # =====================================================================================================================
 #   Uninstalls
