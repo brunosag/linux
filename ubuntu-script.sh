@@ -204,16 +204,16 @@ sudo apt remove thunderbird -y
 sudo apt autoremove -y
 
 # =====================================================================================================================
-#   Dock
+#   General
 # =====================================================================================================================
 
 # Adjust Dock apps and order
 dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'code_code.desktop']"
 
-# =====================================================================================================================
-#   Fixes
-# =====================================================================================================================
-
 # Fix Nitro 5 brightness problem
 sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash pcie_aspm=force acpi_backlight=native"/' /etc/default/grub
 sudo update-grub
+
+# Intall JetBrains Mono font
+sudo apt install curl -y
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
