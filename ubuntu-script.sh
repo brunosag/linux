@@ -126,6 +126,10 @@ dconf write /org/gnome/settings-daemon/plugins/power/idle-dim false             
 dconf write /org/gnome/desktop/session/idle-delay 'uint32 0'                         # Screen Blank = Never
 dconf write /org/gnome/settings-daemon/plugins/power/power-button-action '"suspend"' # Power Button Behavior = Suspend
 
+# Text Editor
+dconf write /org/gnome/TextEditor/spellcheck false      # Check Spelling = False
+dconf write /org/gnome/TextEditor/restore-session false # Restore Session = False
+
 # =====================================================================================================================
 #   Software
 # =====================================================================================================================
