@@ -1,0 +1,34 @@
+#!/bin/bash
+
+NUM_ARGS=$#
+DISPLAYS=([1]="HDMI-1-0" [2]="eDP-1")
+
+command_is_valid() {
+    if [[ $NUM_ARGS -eq 0 ]]; then
+        return 0
+    elif [ $NUM_ARGS -eq 1 ]; then
+        if [ 1 -eq "$(echo "$1 > 0" | bc)" ] && [ 1 -eq "$(echo "$1 <= 1" | bc)" ]; then
+            return 0
+        fi
+    elif [ $NUM_ARGS -eq 2 ]; then
+        if [[ $1 =~ [12] ]] && { [ 1 -eq "$(echo "$2 >= 0" | bc)" ] && [ 1 -eq "$(echo "$2 <= 1" | bc)" ]; }; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+if ! command_is_valid "$@"; then
+    echo "Usage: bright [[1|2]? [0-1]]?"
+    exit 1
+fi
+
+if [ $# -eq 0 ]; then
+    exit
+elif [ $# -eq 1 ]; then
+    for display in "${DISPLAYS[@]}"; do
+        xrandr --output "${display}" --brightness "$1"
+    done
+else
+    xrandr --output "${DISPLAYS[$1]}" --brightness "$2"
+fi
