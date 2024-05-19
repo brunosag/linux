@@ -218,7 +218,7 @@ sudo apt autoremove -y
 # =============================================================================
 
 # Adjust Dock apps and order
-dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'code_code.desktop', 'io.github.mimbrero.WhatsAppDesktop.desktop']"
+dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'code_code.desktop', 'io.github.mimbrero.WhatsAppDesktop.desktop', 'spotify_spotify.desktop']"
 
 # Fix Nitro 5 brightness problem
 sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash pcie_aspm=force acpi_backlight=native"/' /etc/default/grub
