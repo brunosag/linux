@@ -2,7 +2,7 @@
 
 # Constants
 GH_PSA="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"
-BACKGROUND_COLOR="#141414"
+DESKTOP_BG_COLOR="hsl(220, 10%, 10%)"
 
 # Initial upgrades
 sudo apt update -y
@@ -24,19 +24,21 @@ sudo apt upgrade -y
 # Authenticate into Github with PSA token
 echo "$GH_PSA" | gh auth login --git-protocol ssh --hostname GitHub.com --with-token
 
-# Generate SSH key
-ssh-keygen -q -t ed25519 -C "brunosag02@gmail.com" -f ~/.ssh/id_ed25519 -N "" <<<y
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
+if [ ! -f ~/.ssh/id_ed25519 ]; then
+	# Generate SSH key
+	ssh-keygen -q -t ed25519 -C "brunosag02@gmail.com" -f ~/.ssh/id_ed25519 -N "" <<<y
+	eval "$(ssh-agent -s)"
+	ssh-add ~/.ssh/id_ed25519
 
-# Remove existing "ubuntu" keys from GitHub
-existing_keys=($(gh ssh-key list | grep "ubuntu" | awk '{print $5}'))
-for key in "${existing_keys[@]}"; do
-	gh ssh-key delete "$key" -y
-done
+	# Remove existing "ubuntu" keys from GitHub
+	mapfile -t existing_keys < <(gh ssh-key list | grep "ubuntu" | awk '{print $5}')
+	for key in "${existing_keys[@]}"; do
+		gh ssh-key delete "$key" -y
+	done
 
-# Add newly generated key to GitHub
-gh ssh-key add ~/.ssh/id_ed25519.pub --title "ubuntu"
+	# Add newly generated key to GitHub
+	gh ssh-key add ~/.ssh/id_ed25519.pub --title "ubuntu"
+fi
 
 # Add GitHub to trusted hosts
 ssh-keyscan github.com >>~/.ssh/known_hosts
@@ -51,9 +53,9 @@ echo -e "[user]\n\temail = brunosag02@gmail.com\n\tname = brunosag" >~/.gitconfi
 # Install GNOME Extensions CLI
 sudo apt install pipx -y
 pipx install gnome-extensions-cli --system-site-packages
-export PATH="~/.local/bin:$PATH"
-if ! grep -qxF 'export PATH="~/.local/bin:$PATH"' ~/.bashrc; then
-	echo 'export PATH="~/.local/bin:$PATH"' >>~/.bashrc
+export PATH="$HOME/.local/bin:$PATH"
+if ! grep -qxF export PATH="~/.local/bin:$PATH" ~/.bashrc; then
+	echo export PATH="$HOME/.local/bin:$PATH" >>~/.bashrc
 fi
 
 # Install extensions
@@ -74,7 +76,7 @@ dconf write /org/gnome/shell/extensions/hidetopbar/enable-active-window false   
 # Install Orchis theme
 sudo apt install gnome-themes-extra gtk2-engines-murrine sassc -y
 git clone git@github.com:vinceliuice/Orchis-theme.git
-cd Orchis-theme
+cd Orchis-theme || exit
 ./install.sh -u
 ./install.sh -t grey -c dark -l
 cd ..
@@ -82,7 +84,7 @@ rm -r -f Orchis-theme
 
 # Install Tela icons
 git clone git@github.com:vinceliuice/Tela-icon-theme.git
-cd Tela-icon-theme
+cd Tela-icon-theme || exit
 ./install.sh -c blue
 cd ..
 rm -r -f Tela-icon-theme
@@ -99,7 +101,7 @@ dconf write /org/gnome/desktop/interface/icon-theme "'Tela-blue-dark'"
 # Set background
 dconf write /org/gnome/desktop/background/picture-uri '""'
 dconf write /org/gnome/desktop/background/picture-uri-dark '""'
-dconf write /org/gnome/desktop/background/primary-color "'""$BACKGROUND_COLOR""'"
+dconf write /org/gnome/desktop/background/primary-color "'""$DESKTOP_BG_COLOR""'"
 
 # Install GNOME Tweaks
 sudo apt install gnome-tweaks -y
@@ -203,6 +205,7 @@ sudo apt remove gnome-sudoku -y
 
 # Uninstall Thunderbird Mail
 sudo apt remove thunderbird -y
+sudo snap remove thunderbird
 
 # Remove unused dependencies
 sudo apt autoremove -y
@@ -212,7 +215,7 @@ sudo apt autoremove -y
 # =============================================================================
 
 # Adjust Dock apps and order
-dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'code_code.desktop']"
+dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'code_code.desktop', 'io.github.mimbrero.WhatsAppDesktop.desktop']"
 
 # Fix Nitro 5 brightness problem
 sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash pcie_aspm=force acpi_backlight=native"/' /etc/default/grub
@@ -222,10 +225,12 @@ sudo update-grub
 sudo apt install curl -y
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
 
-# Create scripts directory
-mkdir ~/scripts
-if ! grep -qxF 'export PATH="~/scripts:$PATH"' ~/.bashrc; then
-	echo 'export PATH="~/scripts:$PATH"' >>~/.bashrc
+# Create scripts directory and add to PATH
+if [ ! -d ~/scripts ]; then
+	mkdir ~/scripts
+fi
+if ! grep -qxF export PATH="~/scripts:$PATH" ~/.bashrc; then
+	echo export PATH="~/scripts:$PATH" >>~/.bashrc
 fi
 
 # =============================================================================
@@ -239,16 +244,21 @@ sudo apt install -y build-essential make libx11-dev libxrandr-dev libxinerama-de
 sudo apt install -y python-is-python3 ffmpeg
 
 # Racket
-wget https://mirror.racket-lang.org/installers/8.12/racket-8.12-x86_64-linux-cs.sh
-sudo sh racket-8.12-x86_64-linux-cs.sh --in-place --dest /usr/racket
-rm racket-8.12-x86_64-linux-cs.sh
-if ! grep -qxF 'export PATH="/usr/racket/bin:$PATH"' ~/.bashrc; then
-	echo 'export PATH="/usr/racket/bin:$PATH"' >>~/.bashrc
-fi
-raco pkg install --auto racket-langserver
-raco pkg install --auto fmt
+# wget https://mirror.racket-lang.org/installers/8.12/racket-8.12-x86_64-linux-cs.sh
+# sudo sh racket-8.12-x86_64-linux-cs.sh --in-place --dest /usr/racket
+# rm racket-8.12-x86_64-linux-cs.sh
+# if ! grep -qxF 'export PATH="/usr/racket/bin:$PATH"' ~/.bashrc; then
+# 	echo 'export PATH="/usr/racket/bin:$PATH"' >>~/.bashrc
+# fi
+# raco pkg install --auto racket-langserver
+# raco pkg install --auto fmt
 
 # JavaScript
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-nvm install 22 # TODO: maybe this doesn't work without restarting the terminal
+export NVM_DIR="$HOME/.nvm"
+# shellcheck source=/dev/null
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# shellcheck source=/dev/null
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+nvm install 22
 npm install -g npm@latest
