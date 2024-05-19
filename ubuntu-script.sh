@@ -136,6 +136,9 @@ dconf write /org/gnome/TextEditor/restore-session false # Restore Session = Fals
 dconf write /org/gtk/gtk4/settings/file-chooser/show-hidden true        # Show Hidden Files = True
 dconf write /org/gnome/nautilus/icon-view/default-zoom-level '"medium"' # Icon Size = Medium
 
+# Mouse
+dconf write /org/gnome/desktop/peripherals/mouse/speed -0.5 # Pointer Speed = -0.5
+
 # =============================================================================
 #   Software
 # =============================================================================
