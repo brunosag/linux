@@ -8,18 +8,18 @@ BACKGROUND_COLOR="#141414"
 sudo apt update -y
 sudo apt upgrade -y
 
-# =====================================================================================================================
+# =============================================================================
 #   Git
-# =====================================================================================================================
+# =============================================================================
 
 # Install GitHub CLI
 (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) &&
-    sudo mkdir -p -m 755 /etc/apt/keyrings &&
-    wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >/dev/null &&
-    sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg &&
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null &&
-    sudo apt update &&
-    sudo apt install gh -y
+	sudo mkdir -p -m 755 /etc/apt/keyrings &&
+	wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >/dev/null &&
+	sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg &&
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null &&
+	sudo apt update &&
+	sudo apt install gh -y
 
 # Authenticate into Github with PSA token
 echo "$GH_PSA" | gh auth login --git-protocol ssh --hostname GitHub.com --with-token
@@ -32,7 +32,7 @@ ssh-add ~/.ssh/id_ed25519
 # Remove existing "ubuntu" keys from GitHub
 existing_keys=($(gh ssh-key list | grep "ubuntu" | awk '{print $5}'))
 for key in "${existing_keys[@]}"; do
-    gh ssh-key delete "$key" -y
+	gh ssh-key delete "$key" -y
 done
 
 # Add newly generated key to GitHub
@@ -44,16 +44,16 @@ ssh-keyscan github.com >>~/.ssh/known_hosts
 # Add .gitconfig
 echo -e "[user]\n\temail = brunosag02@gmail.com\n\tname = brunosag" >~/.gitconfig
 
-# =====================================================================================================================
+# =============================================================================
 #   Extensions
-# =====================================================================================================================
+# =============================================================================
 
 # Install GNOME Extensions CLI
 sudo apt install pipx -y
 pipx install gnome-extensions-cli --system-site-packages
 export PATH="~/.local/bin:$PATH"
 if ! grep -qxF 'export PATH="~/.local/bin:$PATH"' ~/.bashrc; then
-    echo 'export PATH="~/.local/bin:$PATH"' >>~/.bashrc
+	echo 'export PATH="~/.local/bin:$PATH"' >>~/.bashrc
 fi
 
 # Install extensions
@@ -67,9 +67,9 @@ dconf write /org/gnome/shell/extensions/hidetopbar/mouse-sensitive true         
 dconf write /org/gnome/shell/extensions/hidetopbar/enable-intellihide false                   # Hide Top Bar -> Only hide panel when a window takes the spane = False
 dconf write /org/gnome/shell/extensions/hidetopbar/enable-active-window false                 # Hide Top Bar -> Only when the active window takes the space = False
 
-# =====================================================================================================================
+# =============================================================================
 #   Theme
-# =====================================================================================================================
+# =============================================================================
 
 # Install Orchis theme
 sudo apt install gnome-themes-extra gtk2-engines-murrine sassc -y
@@ -104,9 +104,9 @@ dconf write /org/gnome/desktop/background/primary-color "'""$BACKGROUND_COLOR""'
 # Install GNOME Tweaks
 sudo apt install gnome-tweaks -y
 
-# =====================================================================================================================
+# =============================================================================
 #   Settings
-# =====================================================================================================================
+# =============================================================================
 
 # Desktop Icons
 dconf write /org/gnome/shell/extensions/ding/start-corner '"top-left"' # Position of New Icons = Top Left
@@ -134,9 +134,9 @@ dconf write /org/gnome/TextEditor/restore-session false # Restore Session = Fals
 dconf write /org/gtk/gtk4/settings/file-chooser/show-hidden true        # Show Hidden Files = True
 dconf write /org/gnome/nautilus/icon-view/default-zoom-level '"medium"' # Icon Size = Medium
 
-# =====================================================================================================================
+# =============================================================================
 #   Software
-# =====================================================================================================================
+# =============================================================================
 
 # Install Flatpak
 sudo apt install flatpak gnome-software-plugin-flatpak -y
@@ -179,9 +179,9 @@ sudo snap refresh
 # Update Flatpak packages
 sudo flatpak update -y
 
-# =====================================================================================================================
+# =============================================================================
 #   Uninstalls
-# =====================================================================================================================
+# =============================================================================
 
 # Uninstall AisleRiot Solitaire
 sudo apt remove aisleriot -y
@@ -207,9 +207,9 @@ sudo apt remove thunderbird -y
 # Remove unused dependencies
 sudo apt autoremove -y
 
-# =====================================================================================================================
+# =============================================================================
 #   General
-# =====================================================================================================================
+# =============================================================================
 
 # Adjust Dock apps and order
 dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'code_code.desktop']"
@@ -221,3 +221,34 @@ sudo update-grub
 # Intall JetBrains Mono font
 sudo apt install curl -y
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
+
+# Create scripts directory
+mkdir ~/scripts
+if ! grep -qxF 'export PATH="~/scripts:$PATH"' ~/.bashrc; then
+	echo 'export PATH="~/scripts:$PATH"' >>~/.bashrc
+fi
+
+# =============================================================================
+#   Programming Environment
+# =============================================================================
+
+# C++ (OpenGL)
+sudo apt install -y build-essential make libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxcb1-dev libxext-dev libxrender-dev libxfixes-dev libxau-dev libxdmcp-dev libxxf86vm-dev
+
+# Python
+sudo apt install -y python-is-python3 ffmpeg
+
+# Racket
+wget https://mirror.racket-lang.org/installers/8.12/racket-8.12-x86_64-linux-cs.sh
+sudo sh racket-8.12-x86_64-linux-cs.sh --in-place --dest /usr/racket
+rm racket-8.12-x86_64-linux-cs.sh
+if ! grep -qxF 'export PATH="/usr/racket/bin:$PATH"' ~/.bashrc; then
+	echo 'export PATH="/usr/racket/bin:$PATH"' >>~/.bashrc
+fi
+raco pkg install --auto racket-langserver
+raco pkg install --auto fmt
+
+# JavaScript
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+nvm install 22 # TODO: maybe this doesn't work without restarting the terminal
+npm install -g npm@latest
