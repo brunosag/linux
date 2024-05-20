@@ -46,6 +46,9 @@ ssh-keyscan github.com >>~/.ssh/known_hosts
 # Add .gitconfig
 echo -e "[user]\n\temail = brunosag02@gmail.com\n\tname = brunosag" >~/.gitconfig
 
+# Set code as default git editor
+git config --global core.editor "code --wait"
+
 # =============================================================================
 #   Extensions
 # =============================================================================
