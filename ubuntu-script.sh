@@ -181,6 +181,11 @@ sudo flatpak install flathub com.stremio.Stremio -y
 # Install Inkscape
 sudo flatpak install flathub org.inkscape.Inkscape -y
 
+# Install Insomnia
+wget "https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app" -O insomnia.deb
+sudo apt install ./insomnia.deb -y
+sudo rm insomnia.deb
+
 # Update Snap packages
 sudo snap refresh
 
