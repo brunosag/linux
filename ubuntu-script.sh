@@ -255,14 +255,14 @@ sudo apt install -y build-essential make libx11-dev libxrandr-dev libxinerama-de
 sudo apt install -y python-is-python3 ffmpeg
 
 # Racket
-# wget https://mirror.racket-lang.org/installers/8.12/racket-8.12-x86_64-linux-cs.sh
-# sudo sh racket-8.12-x86_64-linux-cs.sh --in-place --dest /usr/racket
-# rm racket-8.12-x86_64-linux-cs.sh
-# if ! grep -qxF 'export PATH="/usr/racket/bin:$PATH"' ~/.bashrc; then
-# 	echo 'export PATH="/usr/racket/bin:$PATH"' >>~/.bashrc
-# fi
-# raco pkg install --auto racket-langserver
-# raco pkg install --auto fmt
+wget https://mirror.racket-lang.org/installers/8.12/racket-8.12-x86_64-linux-cs.sh
+sudo sh racket-8.12-x86_64-linux-cs.sh --in-place --dest /usr/racket
+rm racket-8.12-x86_64-linux-cs.sh
+if ! grep -qxF "export PATH=$PATH:'/usr/racket/bin'" ~/.bashrc; then
+	echo "export PATH=$PATH:'/usr/racket/bin'" >>~/.bashrc
+fi
+raco pkg install --auto racket-langserver
+raco pkg install --auto fmt
 
 # JavaScript
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
