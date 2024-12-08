@@ -16,7 +16,7 @@ rm -rf !(.git)
 
 # Copy all contents of dev directory into prod directory (except /.git)
 cd ../msl-viewer/ || exit
-git checkout origin/svelte
+git checkout origin/dev
 rsync -a --exclude '.git/' ./ ../map-stroke/
 
 # Get last commit message from dev repo

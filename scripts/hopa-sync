@@ -2,32 +2,32 @@
 
 # Remove dev and prod directories
 cd ~ || exit
-rm -rf website-v2
-rm -rf sbcb-v2-live
+rm -rf hopa-dev
+rm -rf hopa
 
 # Clone dev and prod repo
-git clone git@github.com:sbcblab/website-v2.git
-git clone git@github.com:brunosag/sbcb-v2-live.git
+git clone git@github.com:brunosag/hopa-dev.git
+git clone git@github.com:sbcblab/hopa.git
 
 # Remove all files inside prod directory (except /.git)
-cd sbcb-v2-live/ || exit
+cd hopa-dev/ || exit
 shopt -s extglob dotglob
 rm -rf !(.git)
 
 # Copy all contents of dev directory into prod directory (except /.git)
-rsync -a --exclude '.git/' ../website-v2/ ./
+cd ../hopa/ || exit
+rsync -a --exclude '.git/' ./ ../hopa-dev/
 
 # Get last commit message from dev repo
-cd ../website-v2/ || exit
 last_commit_message=$(git log -1 --pretty=%B)
 
 # Commit and push changes to prod repo
-cd ../sbcb-v2-live/ || exit
+cd ../hopa-dev/ || exit
 git add .
 git commit -m "$last_commit_message"
 git push origin main
 
 # Remove directories
 cd ~ || exit
-rm -rf website-v2
-rm -rf sbcb-v2-live
+rm -rf hopa
+rm -rf hopa-dev
