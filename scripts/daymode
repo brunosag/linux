@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+ddcutil setvcp 10 100
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
