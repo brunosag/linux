@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ddcutil setvcp 12 $1
