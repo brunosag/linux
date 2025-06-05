@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [ $# -ne 1 ]; then
+    echo "Usage: ankigen [number_of_cards]"
+    exit 1
+fi
+
+cd "$HOME/c/ankigen" || exit
+
+source venv/bin/activate
+
+python main.py "$1"

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+current_datetime=$(date +%FT%H:%M)
+
+zip -r /home/bsag/.yo-backups/${current_datetime}.zip /home/bsag/.var/app/org.polymc.PolyMC/data/PolyMC/instances/yo/
