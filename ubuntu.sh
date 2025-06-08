@@ -58,13 +58,19 @@ gh auth login
 # git config
 echo -e "[user]\n\temail = brunosag02@gmail.com\n\tname = brunosag" >~/.gitconfig
 
+# scripts
+sudo apt install ddcutil
+
+# python
+sudo apt install python3 python-is-python3 python3-venv
+
 # jetbrains mono
+sudo apt install curl
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
 
 # uninstalls
 sudo apt remove yelp -y
 sudo apt remove remmina -y
-sudo apt remove gnome-sudoku -y
 sudo apt remove thunderbird -y
 sudo snap remove thunderbird
 
@@ -109,6 +115,23 @@ flatpak install flathub com.stremio.Stremio -y
 
 # nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+
+# steam
+wget "https://cdn.fastly.steamstatic.com/client/installer/steam.deb" -O steam.deb
+sudo apt install ./steam.deb
+rm steam.deb
+
+# anki
+sudo apt install libxcb-xinerama0 libxcb-cursor0 libnss3
+
+# proton vpn (1.0.8)
+wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb
+sudo dpkg -i ./protonvpn-stable-release_1.0.8_all.deb && sudo apt update
+sudo apt install proton-vpn-gnome-desktop -y
+rm protonvpn-stable-release_1.0.8_all.deb
+
+# pulseaudio
+sudo apt install pulseaudio pavucontrol -y
 
 # cleanup
 sudo snap refresh
