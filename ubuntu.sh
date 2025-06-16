@@ -62,7 +62,7 @@ echo -e "[user]\n\temail = brunosag02@gmail.com\n\tname = brunosag" >~/.gitconfi
 sudo apt install ddcutil
 
 # python
-sudo apt install python3 python-is-python3 python3-venv
+sudo apt install python3-full
 
 # jetbrains mono
 sudo apt install curl
